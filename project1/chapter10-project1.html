@@ -1,0 +1,131 @@
+<html>
+<head>
+<title>Chapter 10</title>
+<link href='http://fonts.googleapis.com/css?family=Merriweather' rel='stylesheet' type='text/css'>
+<link href='http://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" href="css/styles.css">
+
+
+<script src="http://code.jquery.com/jquery-3.1.0.min.js"></script>    
+
+
+
+</head>    
+<body class="tiled">
+<header>
+    <h1>Art Filters</h1>
+</header>
+<main>
+    <div id="sliderBox">
+        <form>
+           <label>Opacity: </label><p><input type="range" id="sliderOpacity" min="0" max="100" value="100" class="sliders" /> <span id="numOpacity">100</span>%</p>
+           <p><label>Saturation: </label><input type="range" id="sliderSaturation" min="1" max="300" value="100" class="sliders"/> <span id="numSaturation">100</span>%</p>
+           <p><label>Brightness: </label><input type="range" id="sliderBrightness" min="0" max="300" value="100" class="sliders" /> <span id="numBrightness">100</span>%</p>
+           <p><label>Hue Rotate: </label><input type="range" id="sliderHue" min="0" max="360" value="0" class="sliders" /> <span id="numHue">0</span>deg</p>
+           <p><label>Grayscale: </label><input type="range" id="sliderGray" min="0" max="100" value="0" class="sliders"/> <span id="numGray">0</span>%</p>
+           <p><label>Blur: </label><input type="range" id="sliderBlur" min="0" max="10" value="0" class="sliders" /> <span id="numBlur">0</span>px</p>
+           <p><button id="resetFilters">Reset</button> </p>
+        </form>    
+    </div>
+    <figure id="imgManipulated">
+        <img src="images/medium/painting1.jpg" > 
+        <figcaption>
+            <em>Still Life with Flowers in a Glass Vase</em> <br>
+            Jan Davidsz. de Heem, 1650 - 1683
+        </figcaption>
+    </figure>   
+    <div id="thumbBox">
+        <div><img src="images/small/painting1.jpg"  alt="Still Life with Flowers in a Glass Vase" title="Jan Davidsz. de Heem, 1650 - 1683"/></div>
+        <div><img src="images/small/painting2.jpg"  alt="Portrait of Alida Christina Assink" title="Jan Adam Kruseman, 1833"/></div>
+        <div><img src="images/small/painting3.jpg"  alt="Self-portrait" title="Vincent van Gogh, 1887"/></div>
+        <div><img src="images/small/painting4.jpg"  alt="William II, Prince of Orange, and his Bride, Mary Stuart" title="Anthony van Dyck, 1641"/></div>
+        <div><img src="images/small/painting5.jpg"  alt="Milkmaid" title="Johannes Vermeer, c. 1660"/></div>
+    </div>
+</main>
+<script>
+    //Step 3: Add listener to click event on the painting thumbnails.
+
+    $('div img').on('click', function () {
+    //var alt = $(this).attr('alt');
+    //var title=$(this).attr('title');
+    //var src = $(this).attr('src');
+
+    //Step 3: Replace the folder name small with medium in src attribute.
+
+    
+    var splitted = $(this).attr('src').split("images/small");
+    var newl = "images/medium";
+    var newlink = newl + splitted[1];
+
+    $('figure img').attr("src",newlink);
+    //Step 4: Change the figcaption to display title and artist information.
+
+    $('figcaption').html("<em>"+$(this).attr('alt')+"</em><br>"+$(this).attr('title'));
+    });
+
+    //Step 5: set up event listeners for the input event of each of the range sliders.
+
+    $('#sliderOpacity').on('input', function() {
+        $('#numOpacity').html($(this).val());
+        $(this).attr('value',$(this).val());
+        imageeditor();
+    });
+
+    $('#sliderSaturation').on('input', function() {
+        $('#numSaturation').html($(this).val());
+        $(this).attr('value',$(this).val());
+        imageeditor();
+    });
+
+    $('#sliderBrightness').on('input',function() {
+        $('#numBrightness').html($(this).val());
+        $(this).attr('value',$(this).val());
+        imageeditor();
+    });
+
+    $('#sliderHue').on('input',function() {
+        $('#numHue').html($(this).val());
+        $(this).attr('value',$(this).val());
+        imageeditor();
+    });
+
+    $('#sliderGray').on('input',function() {
+        $('#numGray').html($(this).val());
+        $(this).attr('value',$(this).val());
+        imageeditor();
+    });
+
+    $('#sliderBlur').on('input',function() {
+        $('#numBlur').html($(this).val());
+        $(this).attr('value',$(this).val());
+        imageeditor();
+    });
+
+    //Step 5: To set filter and -web-kit-filter properties on the image in the <figure>
+    function imageeditor(){
+        var $newOpacity=$('#sliderOpacity').attr('value');
+        var $newSaturatiion=$('#sliderSaturation').attr('value');
+        var $newBrightness=$('#sliderBrightness').attr('value');
+        var $newHue=$('#sliderHue').attr('value');
+        var $newGray=$('#sliderGray').attr('value');
+        var $newBlur=$('#sliderBlur').attr('value');
+        $('#imgManipulated img').css('filter', 'opacity('+$newOpacity+'%) saturate('+$newSaturatiion+'%) brightness('+$newBrightness+'%) hue-rotate('+$newHue+'deg) grayscale('+$newGray+'%) blur('+$newBlur+'px)');
+        $('#imgManipulated img').css('-webkit-filter', 'opacity('+$newOpacity+'%) saturate('+$newSaturatiion+'%) brightness('+$newBrightness+'%) hue-rotate('+$newHue+'deg) grayscale('+$newGray+'%) blur('+$newBlur+'px)');
+    }
+    //Step 6: To add listener for the click event of the reset button
+    $(button).on('click',function(e) {
+        e.preventDefault();
+        //Step 6: To remove filters from the image
+        $('#imgManipulated img').css('filter','');
+        $('#imgManipulated img').css('-webkit-filter','');  
+        //Step 6:Reset the value of attribute
+        $('#sliderOpacity').attr('value','100');  
+        $('#sliderSaturation').attr('value','100');  
+        $('#sliderBrightness').attr('value','100');
+        $('#sliderHue').attr('value','0');
+        $('#sliderGray').attr('value','0');
+        $('#sliderBlur').attr('value','0');
+});
+</script>    
+</body>   
+</html>
